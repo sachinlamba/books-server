@@ -26,12 +26,12 @@ const bookRoutes = (app, fs) => {
 
     // READ
     app.get('/books', (req, res) => {
-      console.log("dataPath", dataPath)
         fs.readFile(dataPath, 'utf8', (err, data) => {
             if (err) {
                 throw err;
             }
             let bookList = JSON.parse(data).books;
+            console.log("Books List read method");
             res.send(bookList);
         });
     });
@@ -42,6 +42,7 @@ const bookRoutes = (app, fs) => {
         readFile(data => {
             let BookISBN = req.body.data.isbn;
             // add the new book
+            console.log("Books create method");
             if(data.books.filter(book => book.isbn == BookISBN).length ){
               res.status(200).send("Already book with ISBN", BookISBN, "exist.");
             }else{
@@ -63,6 +64,7 @@ const bookRoutes = (app, fs) => {
             // add the new book
             const isbn = req.params["isbn"];
             let index = data.books.findIndex(x => x.isbn === isbn);
+            console.log("Books Update method");
             if(index < 0){
               data.books.push(req.body.data);
               writeFile(JSON.stringify(data, null, 2), () => {
@@ -86,6 +88,7 @@ const bookRoutes = (app, fs) => {
             // add the new book
             const isbn = req.params["isbn"];
             let index = data.books.findIndex(x => x.isbn === isbn);
+            console.log("Books Delete method");
             if(index < 0){
               res.status(200).send(`books isbn:${isbn} not exist for delete.`);
             }else{
